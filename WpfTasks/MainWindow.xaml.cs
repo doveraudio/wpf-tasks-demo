@@ -38,8 +38,20 @@ namespace WpfTasks
         string externalip;
 
         private void getIp() {
+            var ips = Dns.GetHostAddresses(Environment.MachineName);
+            externalip = ips.Where( s =>  s.AddressFamily == AddressFamily.InterNetwork ).ToString();
+            //externalip = new WebClient().DownloadString("http://icanhazip.com");
+            foreach (var ip in ips) {
 
-            externalip = new WebClient().DownloadString("http://icanhazip.com");
+                if (ip.AddressFamily == AddressFamily.InterNetwork) {
+
+                    externalip = ip.ToString();
+
+                }
+
+            }
+            //externalip = Dns.GetHostAddresses(Environment.MachineName)[0].ToString();
+
             txtCurrentIp.Text = externalip;
         }
         private void btnSendMessage_Click(object sender, RoutedEventArgs e)
